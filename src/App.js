@@ -1,23 +1,28 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { Search } from './components/Search';
+import useWeather from './hooks/useWeathers';
 
 function App() {
+  const weathers = useWeather();
+
   return (
     <div className="App">
       <header className="App-header">
+        <Search/>
+        <hr/>
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <ul>
+          {
+            weathers
+              .reduce((accumulator, currentValue) => {
+                const found = accumulator.find(element => element.id === currentValue.id);
+                return found ? accumulator : [...accumulator, currentValue];
+              }, [])
+              .map(wheather => <li key={Math.random()}>{wheather.name}: {wheather.main.temp}</li>)
+          }
+        </ul>
       </header>
     </div>
   );
